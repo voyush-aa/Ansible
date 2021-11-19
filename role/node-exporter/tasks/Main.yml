@@ -1,0 +1,47 @@
+- name: test connection
+  ping:
+
+- name: create group
+  group:
+    name: "{{ node_exporter_group }}"
+    state: present
+
+- name: create user
+  user:
+    name: "{{ node_exporter_user }}"
+    group: "{{ node_exporter_group }}"
+    system: true
+    create_home: false
+
+- name: create directory
+    file:
+      path: "{{ node_exporter_bin }}"
+      state: directory
+
+- name: download
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp/
+
+- name: unarchive
+  unarchive:
+    remote_src: yes
+    src: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+    dest: "{{ node_exporter_bin }}"
+
+#- name: clean
+#  file:
+#    path: /tmp/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+#    state: absent
+
+- name: install service
+  template:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: configure systemd
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    name: node_exporter.service
