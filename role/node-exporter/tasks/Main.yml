@@ -38,10 +38,12 @@
   template:
     src: node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
+  notify: reload_daemon_and_restart_node_exporter
+
+- meta: flush_handlers
 
 - name: configure systemd
   systemd:
     daemon_reload: yes
     enabled: yes
     state: started
-    name: node_exporter.service

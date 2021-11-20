@@ -1,3 +1,4 @@
-- hosts: servers_example
+- name: install node-exporter
+  hosts: servers_example
   roles:
     - node-exporter
