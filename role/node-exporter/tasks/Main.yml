@@ -1,3 +1,5 @@
+---
+
 - name: test connection
   ping:
 
@@ -38,12 +40,10 @@
   template:
     src: node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
-  notify: reload_daemon_and_restart_node_exporter
+  notify: systemd reload
 
-- meta: flush_handlers
-
-- name: configure systemd
+- name: start service
   systemd:
-    daemon_reload: yes
-    enabled: yes
+    name: node_exporter
     state: started
+    enabled: yes

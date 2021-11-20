@@ -1,4 +1,7 @@
+---
+
 - name: install node-exporter
   hosts: servers_example
+  sudo: true
   roles:
     - node-exporter
