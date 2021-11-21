@@ -2,6 +2,8 @@
 
 - name: install node-exporter
   hosts: servers_example
-  sudo: true
+  become: true
+  become_method: sudo
+  become_user: root
   roles:
     - node-exporter
